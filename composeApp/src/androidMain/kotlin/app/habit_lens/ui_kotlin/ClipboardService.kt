@@ -51,6 +51,35 @@ class ClipboardService : Service() {
         startForegroundNotification()
     }
 
+    private fun showResultNotification(text: String) {
+        val channelId = "clipboard_result_channel"
+        val notificationId = System.currentTimeMillis().toInt()
+
+        val manager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                channelId,
+                "Clipboard Results",
+                NotificationManager.IMPORTANCE_HIGH
+            ).apply {
+                description = "Results from clipboard processing"
+            }
+            manager.createNotificationChannel(channel)
+        }
+
+        val notification = Notification.Builder(this, channelId)
+            .setSmallIcon(R.drawable.ic_notification)
+            .setContentTitle("AI Dictionary")
+            .setContentText(text)
+            .setStyle(Notification.BigTextStyle().bigText(text))
+            .setAutoCancel(true)
+            .build()
+
+        manager.notify(notificationId, notification)
+    }
+
+
     fun handleClipboardText(text: String) {
         val request = Request.Builder()
             .url("http://192.168.1.38:8915/ai-dictionary?text=${URLEncoder.encode(text, "UTF-8")}")
@@ -60,11 +89,13 @@ class ClipboardService : Service() {
         OkHttpClient().newCall(request).enqueue(object : Callback {
             override fun onResponse(call: Call, response: Response) {
                 val body = response.body?.string() ?: return
-                showOverlay(body)
+//                showOverlay(body)
+                showResultNotification(body)
             }
 
             override fun onFailure(call: Call, e: IOException) {
-                showOverlay(e.message.toString())
+                showResultNotification(e.message.toString())
+//                showOverlay(e.message.toString())
             }
         })
 

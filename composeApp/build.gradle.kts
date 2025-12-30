@@ -76,16 +76,48 @@ android {
         versionCode = 1
         versionName = "1.0"
     }
+
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
-    buildTypes {
-        getByName("release") {
-            isMinifyEnabled = false
+
+    signingConfigs {
+        create("release") {
+            // ────────────────────────────────────────────────────────────────
+            // Option 1 – Best for most teams (recommended in 2025)
+            // Key is stored right next to build.gradle.kts (same folder)
+            // → Very clean, project is portable, .gitignore friendly
+            // ────────────────────────────────────────────────────────────────
+//            storeFile = file("my-release-key.jks")
+            // Option 2 – Also very good – key in project root (one level up)
+//             storeFile = file("$rootDir/my-release-key.jks")
+             storeFile = file("/home/shd/scratches/ui-kotlin/my-release-key.jks")
+            // storeFile = file(System.getenv("ANDROID_KEYSTORE_PATH") ?: "my-release-key.jks")
+            storePassword = "123123"           // ← better to use properties/env vars!
+            keyAlias = "myalias"
+            keyPassword = "123123"             // ← same here
+            enableV1Signing = true             // still needed for old Android <7.0
+            enableV2Signing = true
+            enableV3Signing = true             // now very widely supported
         }
     }
+
+    buildTypes {
+        getByName("release") {
+            signingConfig = signingConfigs.getByName("release")
+
+            isMinifyEnabled = false           // change to true later + add real proguard-rules.pro
+            isShrinkResources = false         // ← usually pair with minifyEnabled
+
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11

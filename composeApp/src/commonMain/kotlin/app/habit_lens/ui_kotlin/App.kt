@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.material3.Button
+import androidx.compose.material3.InputChip
+import androidx.compose.material3.Label
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
@@ -18,12 +20,15 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 
 import ui_kotlin.composeapp.generated.resources.Res
 import ui_kotlin.composeapp.generated.resources.compose_multiplatform
+import kotlin.repeat
 
 @Composable
 @Preview
 fun     App() {
+
     MaterialTheme {
         var showContent by remember { mutableStateOf(false) }
+        var num = 0
         Column(
             modifier = Modifier
                 .background(MaterialTheme.colorScheme.primaryContainer)
@@ -31,9 +36,7 @@ fun     App() {
                 .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Button(onClick = { showContent = !showContent }) {
-                Text("Click me!")
-            }
+            Text("FINE")
             AnimatedVisibility(showContent) {
                 val greeting = remember { Greeting().greet() }
                 Column(
@@ -43,6 +46,7 @@ fun     App() {
                     Image(painterResource(Res.drawable.compose_multiplatform), null)
                     Text("Compose: $greeting")
                 }
+
             }
         }
     }

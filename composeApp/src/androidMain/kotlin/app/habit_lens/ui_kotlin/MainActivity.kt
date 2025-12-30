@@ -1,12 +1,14 @@
 package app.habit_lens.ui_kotlin
 
 import android.Manifest
+import android.app.AlertDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -15,25 +17,26 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.startActivity
+import kotlin.text.compareTo
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        if (!Settings.canDrawOverlays(this)) {
-            val intent = Intent(
-                Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                Uri.parse("package:$packageName")
-            )
-            startActivity(intent)
-        }
-
-        requestLocalNetworkPermission()
+//
+//        if (!Settings.canDrawOverlays(this)) {
+//            val intent = Intent(
+//                Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+//                Uri.parse("package:$packageName")
+//            )
+//            startActivity(intent)
+//        }
+//
+//        requestLocalNetworkPermission()
         startClipboardService()
 
-//        setContent {
-//            App()
-//        }
+        setContent {
+            App()
+        }
     }
 
     private fun startClipboardService() {
@@ -64,10 +67,3 @@ class MainActivity : ComponentActivity() {
     }
 
 }
-
-
-//@Preview
-//@Composable
-//fun AppAndroidPreview() {
-//    App()
-//}
