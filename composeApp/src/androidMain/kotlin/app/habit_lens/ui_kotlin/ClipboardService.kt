@@ -90,16 +90,28 @@ class ClipboardService : Service() {
             override fun onResponse(call: Call, response: Response) {
                 val body = response.body?.string() ?: return
 //                showOverlay(body)
-                showResultNotification(body)
+                showOverlayGuaranteed(body)
+//                showResultNotification(body)
             }
 
             override fun onFailure(call: Call, e: IOException) {
-                showResultNotification(e.message.toString())
+                showOverlayGuaranteed(e.message.toString())
+//                showResultNotification(e.message.toString())
 //                showOverlay(e.message.toString())
             }
         })
 
     }
+
+    private fun showOverlayGuaranteed(text: String) {
+        val intent = Intent(this, OverlayActivity::class.java).apply {
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            putExtra("text", text)
+        }
+        startActivity(intent)
+    }
+
+
 
     fun showOverlay(text: String) {
         mainScope.launch {

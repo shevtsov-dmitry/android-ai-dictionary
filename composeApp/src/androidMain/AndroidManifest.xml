@@ -23,6 +23,16 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
+        <activity
+                android:name=".OverlayActivity"
+                android:theme="@style/OverlayTheme"
+                android:excludeFromRecents="true"
+                android:finishOnTaskLaunch="true"
+                android:launchMode="singleTask"
+                android:taskAffinity=""
+        />
+
         <service
                 android:name=".ClipboardService"
                 android:exported="false"
